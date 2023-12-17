@@ -465,7 +465,7 @@ def Column(In, R, F, loc, selected_row):
             ###! 기둥 Pn, e, c & 변형률
             if 'RC'  in loc:  [bgcolor, ep_cu] = ['lightgreen', R.ep_cu]
             if 'FRP' in loc:  [bgcolor, ep_cu] = ['lightblue',  F.ep_cu]
-            In.depth = In.hD - In.dc[0]
+            dc = In.dc[0]*mr;  In.depth = In.hD - In.dc[0]
 
             if selected_row == None:   # 초기값 (startupFcn)
                 txt = 'Select one from A to G below';  txtPn = 'ϕP<sub>n';  txte = 'e'
