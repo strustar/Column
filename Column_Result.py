@@ -47,8 +47,7 @@ def Fig(In, R, F):
             Table(In, R, F, 'Full Data',  selected_row)
     # PM = R
     # data = np.array([[PM.Ze[n], PM.Zc[n], PM.ZPn[n], PM.ZMn[n], PM.Zphi[n], PM.ZPd[n], PM.ZMd[n], PM.Zep_s[n,1], PM.Zfs[n,1], PM.Zep_s[n,0], PM.Zfs[n,0]] for n in range(len(PM.Ze))])
-    # st.write(data)
-    
+    # st.write(data)    
     
     # selected_row가 설정된 상태에서 PM 상관도를 그리기 위해서
     fig = PM_plot(In, R, F, 'RC',  selected_row);  container_PM_RC.plotly_chart(fig,  config={'displayModeBar': False})
@@ -112,7 +111,6 @@ def full_data(PM):
 
     color = red_text(data)
     return [color, data_str]
-    
 
 def red_text(data):
     # 값이 음수일때, 빨간색으로 설정하기 위해서
@@ -136,23 +134,19 @@ def common_table(headers, data, columnwidth, cells_align, cells_fill_color, heig
     
     fig = go.Figure(data = [go.Table(        
         columnwidth = columnwidth,
-        header = dict(
-            values = list(df.columns),
-            align = ['center'],            
-            fill_color = fill_color,  #'darkgray'
+        header = dict(values = list(df.columns),
+            align = ['center'], font_color='black', fill_color = fill_color,  #'darkgray'
             font = dict(size = size17, color = 'black', family = family, ),  # 글꼴 변경
             line = dict(color = 'black', width = lw),   # 셀 경계색, 두께
         ),
-        cells = dict(
-            values = [df[col] for col in df.columns],
-            align = cells_align, font_color=color,
-            fill_color = cells_fill_color,  # 셀 배경색 변경
+        cells = dict(values = [df[col] for col in df.columns],
+            align = cells_align, font_color=color,  fill_color = cells_fill_color,  # 셀 배경색 변경
             font = dict(size = size17, color = 'black', family = family, ),  # 글꼴 변경
             line = dict(color = 'black', width = lw),   # 셀 경계색, 두께
             # format=['.1f']  # '나이' 열의 데이터를 실수 형태로 변환하여 출력  '.2f'
         ), )],
     )
-    fig.update_layout(autosize=False, width = width, height = height, margin = dict(l = left, r = 1, t = 1, b = 1))  # 테이블 여백 제거  # 표의 크기 지정
+    fig.update_layout(autosize=False, width = width, height = height, margin = dict(l = left, r = 1, t = 1, b = 1))
     st.plotly_chart(fig, config={'displayModeBar': False})
 
 def shape(fig, typ, x0,y0,x1,y1, fillcolor, color, width, **kargs):
@@ -160,8 +154,7 @@ def shape(fig, typ, x0,y0,x1,y1, fillcolor, color, width, **kargs):
     if len(kargs) > 0:  dash = kargs['LineStyle']            
     fig.add_shape(
         type=typ, x0=x0, y0=y0, x1=x1, y1=y1, fillcolor=fillcolor,
-        line=dict(color=color, width=width, dash=dash, ),   # dash = solid, dot, dash, longdash, dashdot, longdashdot, '5px 10px'
-    )
+        line=dict(color=color, width=width, dash=dash, ), )  # dash = solid, dot, dash, longdash, dashdot, longdashdot, '5px 10px'
 
 def annotation(fig, x,y, color, txt, xanchor, yanchor, **kargs):
     bgcolor = None;  size = size17
@@ -169,8 +162,7 @@ def annotation(fig, x,y, color, txt, xanchor, yanchor, **kargs):
     fig.add_annotation(
         x=x, y=y, text=txt, showarrow=False, bgcolor=bgcolor,
         font=dict(color=color, size=size, family=family, ),
-        xanchor=xanchor, yanchor=yanchor,
-    )
+        xanchor=xanchor, yanchor=yanchor, )
 
 def dimension(fig, x0,y0,length, fillcolor, color, width, txt, loc, opt):
     shift = 35;  arrow_size = 12
@@ -379,10 +371,10 @@ def Column(In, R, F, loc, selected_row):
         if 'Circle' in In.Section_Type:
             mr = base_scale/In.D;  w = In.D*mr;  h = w
             typ = 'circle';  txt = f'D = {In.hD:,.0f} mm'
-        x = (xlim - w)/2;  y = (ylim - h)/1.25
-        y_col = 90;  xc = x + w/2  # 기둥
+        x = (xlim - w)/2;  y = (ylim - h)/1.25        
         
         # 기둥
+        y_col = 90;  xc = x + w/2  # 기둥
         shape(fig, 'line', x,0,x,y_col, None, 'black', 2)
         shape(fig, 'line', x+w,0,x+w,y_col, None, 'black', 2)
         shape(fig, 'line', x,y_col,x+w,y_col, None, 'black', 2)        
@@ -408,9 +400,8 @@ def Column(In, R, F, loc, selected_row):
         if 'Common' in loc:            
             ### 콘크리트 단면
             shape(fig, typ, x,y,x+w,y+h, 'yellow', 'black', 2)
-
-            # 치수
-            dimension(fig, x,y+h,w, 'black', 'black', 1.5, txt, 'top', [])    # 가로 치수
+            
+            dimension(fig, x,y+h,w, 'black', 'black', 1.5, txt, 'top', [])      # 가로 치수
             if 'Rectangle' in In.Section_Type:
                 dimension(fig, x,y,h, 'black', 'black', 1.5, f'{In.be:,.0f} mm<br>(b<sub>e</sub>)', 'left', [])    # 세로 치수
             ### 콘크리트 단면
@@ -438,7 +429,7 @@ def Column(In, R, F, loc, selected_row):
                 # 띠 또는 나선철근
                 x1 = x + gap;  y1 = y + gap
                 if 'Rectangle' in In.Section_Type:  w1 = w - 2*gap;  h1 = h - 2*gap                
-                if 'Circle'    in In.Section_Type:  w1 = 2*(r+cr);  h1 = w1
+                if 'Circle'    in In.Section_Type:  w1 = 2*(r+cr);   h1 = w1
                 shape(fig, typ, x1,y1,x1+w1,y1+h1, None, 'black', 1)
 
                 # 가로 치수 (dc)
@@ -450,7 +441,7 @@ def Column(In, R, F, loc, selected_row):
                         dc2 = np.max(R.dsi[L,:]);  dc = w - dc2*mr
                         x1 = x;  txt = f'{In.D-dc2:,.1f} mm'
                     dimension(fig, x1,y1,dc, color, color, 1.5, txt, 'bottom', 'annotationFalse')   # 가로 치수 (치수 문자 제거)
-                    annotation(fig, x1-5,y1-33, color, txt, 'right', 'middle')                  # 치수 문자 (다시 정렬)
+                    annotation(fig, x1-5,y1-33, color, txt, 'right', 'middle')                      # 치수 문자 (다시 정렬)
 
                 # rho, 철근량, 보강량 정보 (A1, A2, A3)
                 txt = f'A<sub>{L+1:.0f}</sub>={R.Ast[L]:,.0f} mm<sup>2'
