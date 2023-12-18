@@ -26,7 +26,13 @@ def Fig(In, R, F):
     with table_Common:
         if 'RC' not in In.PM_Type:
             st.session_state.selected_row = None
-        st.info('먼저 좌측 사이드바에서 PM Diagram Option을 RC vs. FRP로 설정하세요', icon = "ℹ️")
+        placeholder = st.empty()
+        
+        if 'RC' in In.PM_Type:
+            st.info('아래 라디오 버튼을 클릭하세요', icon = "ℹ️")
+        else:
+            st.warning(':green[좌측 사이드바에서 PM Diagram Option을 RC vs. FRP로 설정하세요]', icon="⚠️")
+        
         txt = 'D - ' if 'Circle' in In.Section_Type else 'h - '
         selected_row = st.radio('#### ' + '￭ Select one below', (
             'A (Pure Compression) : $M_n$ = 0, $e$ = 0, $c$ = inf',             
@@ -35,7 +41,7 @@ def Fig(In, R, F):
             'D (Balance Point) : $e$ = $e_{b}$',
             'E : $\epsilon_t$ = 2.5$\epsilon_y$ [RC] or $\epsilon_t$ = 0.8$\epsilon_{fu}$ [FRP]',
             'F (Pure Moment) : $P_n$ = 0, $e$ = inf',
-            'G (Pure Tension) : $M_n$ = 0, $e$ = 0, $c$ = -inf'), key='selected_row', index=None, label_visibility='collapsed')
+            'G (Pure Tension) : $M_n$ = 0, $e$ = 0, $c$ = -inf'), key='selected_row', index=None, label_visibility='collapsed')    
     with table_RC:  Table(In, R, F, 'RC',  selected_row)
     with table_FRP: Table(In, R, F, 'FRP', selected_row)
 
