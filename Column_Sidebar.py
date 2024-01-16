@@ -16,9 +16,13 @@ In.border2 = f'<hr style="border-top: 5px double {color}; margin-top: 0px; margi
 border = '<hr style="border-top: 2px solid purple; margin-top:15px; margin-bottom:15px;">'
 
 def Sidebar(h4, h5):
-    html_code = "<span style='background-color: yellow; font-size: 20px'> 문의 사항은 언제든지 아래 이메일로 문의 주세요^^</span>"
-    sb.markdown(html_code, unsafe_allow_html=True)
-    html_code = "<span style='background-color: yellow; font-size: 20px'> 📧📬 : strustar@konyang.ac.kr (건양대 손병직)</span>"
+    # HTML 코드
+    html_code = """
+        <div style="background-color: lightblue; margin-top: 10px; padding: 10px; padding-top: 20px; padding-bottom:0px; font-weight:bold; border: 2px solid black; border-radius: 20px;">
+            <h5>문의 사항은 언제든지 아래 이메일로 문의 주세요^^</h5>
+            <h5>📧📬 : <a href='mailto:strustar@konyang.ac.kr' style='color: blue;'>strustar@konyang.ac.kr</a> (건양대 손병직)</h5>
+        </div>
+    """
     sb.markdown(html_code, unsafe_allow_html=True)
     
     sb.write('## :blue[[Information : 입력값 📘]]')
