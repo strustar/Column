@@ -1,22 +1,24 @@
 import streamlit as st
 
-sb = st.sidebar
 class In:
     pass
 
 In.ok = ':blue[∴ OK] (🆗✅)';  In.ng = ':red[∴ NG] (❌)'
-In.space = '<div style="margin:0px">'
-In.background_color = 'linen'  #'lightyellow'
 In.col_span_ref = [1, 1];  In.col_span_okng = [5, 1]  # 근거, OK(NG) 등 2열 배열 간격 설정
-In.font_h1 = '28px';  In.font_h2 = '24px';  In.font_h3 = '22px';  In.font_h4 = '20px';  In.font_h5 = '18px';  In.font_h6 = '15px';  In.max_width = 1800
+In.max_width = '1800px'
 
-color = 'green'
-In.border1 = f'<hr style="border-top: 2px solid {color}; margin-top:30px; margin-bottom:30px; margin-right: -30px">'  # 1줄
-In.border2 = f'<hr style="border-top: 5px double {color}; margin-top: 0px; margin-bottom:30px; margin-right: -30px">' # 2줄
-border = '<hr style="border-top: 2px solid purple; margin-top:15px; margin-bottom:15px;">'
+In.font_h1 = '32px';  In.font_h2 = '28px';  In.font_h3 = '26px';  In.font_h4 = '24px';  In.font_h5 = '20px';  In.font_h6 = '16px'
+In.h2 = '## ';  In.h3 = '### ';  In.h4 = '#### ';  In.h5 = '##### ';  In.h6 = '###### '
+In.s1 = In.h5 + '$\quad$';  In.s2 = In.h5 + '$\qquad$';  In.s3 = In.h5 + '$\quad \qquad$'
 
-def Sidebar(h4, h5):
-    # HTML 코드
+In.border1 = f'<hr style="border-top: 2px solid green; margin-top:30px; margin-bottom:30px; margin-right: -30px">'  # 1줄
+In.border2 = f'<hr style="border-top: 5px double green; margin-top: 0px; margin-bottom:30px; margin-right: -30px">'  # 2줄
+
+def Sidebar():
+    sb = st.sidebar
+    side_border = '<hr style="border-top: 2px solid purple; margin-top:15px; margin-bottom:15px;">'
+    h5 = In.h5;  h4 = h5
+    
     html_code = """
         <div style="background-color: lightblue; margin-top: 10px; padding: 10px; padding-top: 20px; padding-bottom:0px; font-weight:bold; border: 2px solid black; border-radius: 20px;">
             <h5>문의 사항은 언제든지 아래 이메일로 문의 주세요^^</h5>
@@ -25,16 +27,22 @@ def Sidebar(h4, h5):
     """
     sb.markdown(html_code, unsafe_allow_html=True)
     
-    sb.write('## :blue[[Information : 입력값 📘]]')
-    sb.write(h4, ':green[✤ Design Code]')
+    sb.write('');  sb.write('## ', ':blue[[Information : 입력값 📘]]');  sb.write('')
+    sb.write(h4, '✤ 워터마크(watermark) 제거*')
+    col = sb.columns(2)
+    with col[0]:
+        In.watermark = st.text_input(h5 + '✦ 숨김', type='password', placeholder='password 입력하세요' , label_visibility='collapsed')  # , type='password'
+    sb.write('###### $\,$', ':blue[*워터마크를 제거 하시려면 메일로 문의주세요]')
 
+    sb.markdown(side_border, unsafe_allow_html=True)   #  구분선 ------------------------------------ 
+    sb.write(h4, ':green[✤ Design Code]')
     col = sb.columns([1, 1.2], gap = 'medium')    
     with col[0]:
         In.RC_Code = st.selectbox(h5 + '￭ RC Code', ('KDS-2021', 'KCI-2012'), key = 'RC_Code')
     with col[1]:        
         In.FRP_Code = st.selectbox(h5 + '￭ FRP Code', ('AASHTO-2018', 'ACI 440.1R-06(15)', 'ACI 440.11-22'), key = 'FRP_Code')
 
-    sb.markdown(border, unsafe_allow_html=True)   ## 빈줄 공간
+    sb.markdown(side_border, unsafe_allow_html=True)   #  구분선 ------------------------------------ 
     col = sb.columns([1, 1.2])
     with col[0]:
         st.write(h4, ':green[✤ Column Type]')
@@ -43,12 +51,11 @@ def Sidebar(h4, h5):
         st.write(h4, ':green[✤ PM Diagram Option]')
         In.PM_Type = st.radio('PM Type', ('RC vs. FRP', 'Pₙ-Mₙ vs. ϕPₙ-ϕMₙ'), horizontal = True, label_visibility = 'collapsed', key = 'PM_Type')    
 
-    sb.markdown(border, unsafe_allow_html=True)   ## 빈줄 공간
+    sb.markdown(side_border, unsafe_allow_html=True)   #  구분선 ------------------------------------ 
     sb.write(h4, ':green[✤ Section Dimensions]')
     col = sb.columns([2, 1])
-    with col[0]:
-        # Section_Type = st.selectbox(h5 + '￭ Section Type', ('Rectangle', 'Circle'), key = 'Section_Type')
-        In.Section_Type = st.radio(h5 + '￭ Section Type', ('Rectangle', 'Circle'), key = 'Section_Type', label_visibility='collapsed')
+    with col[0]:        
+        In.Section_Type = st.radio(h5 + '￭ Section Type', ('Rectangle', 'Circle'), key = 'Section_Type', horizontal = True, label_visibility='collapsed')
 
     col = sb.columns([1, 1, 1])
     if 'Rectangle' in In.Section_Type:  disabledR = False;  disabledC = True
@@ -61,7 +68,7 @@ def Sidebar(h4, h5):
     with col[2]:
         In.D = st.number_input(h5 + r'￭ $\bm{{\small{{D}} }}$ [mm]', min_value = 10., value = 600., step = 10., format = '%f', key = 'D', disabled=disabledC)
 
-    sb.markdown(border, unsafe_allow_html=True)   ## 빈줄 공간
+    sb.markdown(side_border, unsafe_allow_html=True)   #  구분선 ------------------------------------ 
     sb.write(h4, ':green[✤ Material Properties]')
     col = sb.columns(2, gap = 'medium')
     with col[0]:
@@ -74,9 +81,9 @@ def Sidebar(h4, h5):
         In.Es = st.number_input(h5 + r'￭ $\bm{{\small{{E_{s}}} }}$ [GPa]', min_value = 10., value = 200., step = 10., format = '%f', key = 'Es') * 1e3
         In.Ef = st.number_input(h5 + r'￭ $\bm{{\small{{E_{f}}} }}$ [GPa]', min_value = 10., value = 100., step = 10., format = '%f', key = 'Ef') * 1e3
     
-    sb.markdown(border, unsafe_allow_html=True)   ## 빈줄 공간
+    sb.markdown(side_border, unsafe_allow_html=True)   #  구분선 ------------------------------------ 
     sb.write(h4, ':green[✤ Reinforcement Layer (Rebar & FRP)]')    
-    Layer = sb.radio('숨김', ('Layer 1', 'Layer 2', 'Layer 3'), label_visibility='collapsed', key = 'Layer')
+    Layer = sb.radio('숨김', ('Layer 1', 'Layer 2', 'Layer 3'), horizontal = True, label_visibility='collapsed', key = 'Layer')
     if '1' in Layer: In.Layer = 1
     if '2' in Layer: In.Layer = 2
     if '3' in Layer: In.Layer = 3
@@ -96,6 +103,5 @@ def Sidebar(h4, h5):
                 In.nb.append(st.number_input(h5 + r'￭ $\bm{n_b}$ [EA] : $\bm{{\small{b}}}$방향 보강재 개수', min_value = 2, value = 3, step = 1, format = '%d', key = key_nb, label_visibility=label_visibility))
             if 'Circle' in In.Section_Type:
                 In.nD.append(st.number_input(h5 + r'￭ $\bm{n_D}$ [EA] : 원형 단면 총 보강재 개수', min_value = 2, value = 8, step = 1, format = '%d', key = key_nh, label_visibility=label_visibility))
-
-    sb.markdown(border, unsafe_allow_html=True)   ## 빈줄 공간
+    
     return In
